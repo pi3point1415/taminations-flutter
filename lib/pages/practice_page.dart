@@ -167,6 +167,18 @@ class _PracticeFrameState extends fm.State<PracticeFrame>
           else if (event is KeyUpEvent)
             danceModel.practiceDancer!.dDown = false;
         }
+        if (event.physicalKey == PhysicalKeyboardKey.arrowLeft) {
+          if (event is KeyDownEvent)
+            danceModel.practiceDancer!.lDown = true;
+          else if (event is KeyUpEvent)
+            danceModel.practiceDancer!.lDown = false;
+        }
+        if (event.physicalKey == PhysicalKeyboardKey.arrowRight) {
+          if (event is KeyDownEvent)
+            danceModel.practiceDancer!.rDown = true;
+          else if (event is KeyUpEvent)
+            danceModel.practiceDancer!.rDown = false;
+        }
 
       },
       focusNode: _focusNode,

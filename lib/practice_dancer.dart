@@ -45,6 +45,9 @@ class PracticeDancer extends Dancer {
   var aDown = false;
   var dDown = false;
 
+  var lDown = false;
+  var rDown = false;
+
   //  For moving dancer with fingers
   var _primaryid = -1;
   var _secondaryid = -1;
@@ -103,8 +106,8 @@ class PracticeDancer extends Dancer {
     } else {
 
       var trans = Matrix.getTranslation(
-        (wDown ? 0.02 * MOVESENSITIVITY : 0) - (sDown ? 0.02 * MOVESENSITIVITY: 0),
-        (aDown ? 0.02 * MOVESENSITIVITY : 0) - (dDown ? 0.02 * MOVESENSITIVITY: 0)
+          ((wDown ? 0.02 : 0) - (sDown ? 0.02 : 0)) * MOVESENSITIVITY,
+          ((aDown ? 0.02 : 0) - (dDown ? 0.02 : 0)) * MOVESENSITIVITY
       );
 
       // Movement relative to facing direction
@@ -119,6 +122,9 @@ class PracticeDancer extends Dancer {
 
       if (_primaryTouch != NOPOINT) {
         tx = tx * Matrix.getRotation(-tx.angle) * Matrix.getRotation(a2.angle);
+      }
+      else {
+        tx = tx * Matrix.getRotation(((lDown ? 0.05 : 0) - (rDown ? 0.05 : 0)) * ANGLESENSITIVITY);
       }
     }
   }
