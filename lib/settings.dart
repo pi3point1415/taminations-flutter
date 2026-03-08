@@ -224,6 +224,13 @@ class Settings extends fm.ChangeNotifier {
     _instance.notifyListeners();
   }
 
+  static String get cardinalControl =>
+  _instance.proxy.getString('CardinalControl') ?? 'Use cardinal directions';
+  static set cardinalControl(String value) {
+    _instance.proxy.setString('CardinalControl', value);
+    _instance.notifyListeners();
+  }
+
   static String get startingFormation =>
       _instance.proxy.getString('Starting Formation') ?? 'Squared Set';
   static set startingFormation(String value) {

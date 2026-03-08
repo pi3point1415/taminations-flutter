@@ -38,6 +38,13 @@ class PracticeDancer extends Dancer {
   var ctlDown = false;
   var _primaryDirection = NODIRECTION;
 
+  var cardinalControl = true;
+
+  var wDown = false;
+  var sDown = false;
+  var aDown = false;
+  var dDown = false;
+
   //  For moving dancer with fingers
   var _primaryid = -1;
   var _secondaryid = -1;
@@ -77,11 +84,12 @@ class PracticeDancer extends Dancer {
 
 
   Matrix computeMatrix(double beat) {
-    final savetx = tx.clone();
-    super.animate(beat);
-    final computetx = tx.clone();
-    tx = savetx;
-    return computetx;
+    return tx;
+    // final savetx = tx.clone();
+    // super.animate(beat);
+    // final computetx = tx.clone();
+    // tx = savetx;
+    // return computetx;
   }
 
   @override
@@ -95,52 +103,24 @@ class PracticeDancer extends Dancer {
       _primaryMove = Vector();
     } else {
 
-      //  Process primary move, which generally moves the dancer
-      if (_primaryMove != NOPOINT) {
-        final d = (_primaryMove - _primaryTouch) * MOVESENSITIVITY;
-        if (!ctlDown) {
-          tx = Matrix.getTranslation(d.x, d.y) * tx;
-          if (!shiftDown && _secondaryMove == NOPOINT) {
-            //  Rotation follow movement
-            if (_primaryDirection.x == 0.0 && _primaryDirection.y == 0.0)
-              _primaryDirection = d;
-            else {
-              final dd = Vector(
-                //  this smooths the rotation
-                  DIRECTIONALPHA * _primaryDirection.x + (1 - DIRECTIONALPHA) * d.x,
-                  DIRECTIONALPHA * _primaryDirection.y + (1 - DIRECTIONALPHA) * d.y);
-              if (dd.length >= DIRECTIONTHRESHOLD) {
-                var a1 = tx.angle;
-                var a2 = atan2(dd.y, dd.x);
-                tx = tx * Matrix.getRotation(a2 - a1);
-                _primaryDirection = dd;
-              }
-            }
-          }
-        } else {
-          //  Control key pressed - mouse controls rotation only
-          final a = _primaryMove - tx.location;
-          final z = a.crossZ(d);
-          tx = tx * Matrix.getRotation(z* ANGLESENSITIVITY / a.length);
-        }
-        _primaryTouch = _primaryMove;
+      var trans = Matrix.getTranslation(
+        (wDown ? 0.02 * MOVESENSITIVITY : 0) - (sDown ? 0.02 * MOVESENSITIVITY: 0),
+        (aDown ? 0.02 * MOVESENSITIVITY : 0) - (dDown ? 0.02 * MOVESENSITIVITY: 0)
+      );
+
+      // Movement relative to facing direction
+      if (!cardinalControl) {
+        final angle = tx.angle;
+        trans = Matrix.getRotation(angle) * trans * Matrix.getRotation(-angle);
       }
 
-      //  Process secondary move, which rotates the dancer
-      if (_secondaryMove != NOPOINT) {
-        //  Rotation follow right finger
-        //  Get the vector of the user's finger
-        final dx = -(_secondaryMove.x - _secondaryTouch.x) * ANGLESENSITIVITY;
-        final dy = (_secondaryMove.y - _secondaryTouch.y) * ANGLESENSITIVITY;
-        final vf = Vector(dx,dy);
-        //  Get the vector the dancer is facing
-        final vu = tx.direction;
-        //  Amount of rotation is z of the cross product of the two
-        final da = vu.crossZ(vf);
-        tx = tx * Matrix.getRotation(da);
-        _secondaryTouch = _secondaryMove;
-      }
+      tx = trans * tx;
 
+      var a2 = _primaryMove - tx.location;
+
+      if (_primaryTouch != NOPOINT) {
+        tx = tx * Matrix.getRotation(-tx.angle) * Matrix.getRotation(a2.angle);
+      }
     }
   }
 
@@ -152,26 +132,11 @@ class PracticeDancer extends Dancer {
   }
 
   void _touchDownAction(int id, Vector pos, {required bool isMouse}) {
-    //  Figure out if touching left or right side, and remember the point
-    //  Also need to remember the "id" to correlate future move events
-    //  Point has already been transformed to dancer coords
-    if ((pos.y < 0) ^ primaryIsLeft || isMouse) {
-      _primaryTouch = pos;
-      _primaryMove = _primaryTouch;
-      _primaryid = id;
-    } else {
-      _secondaryTouch = pos;
-      _secondaryMove = _secondaryTouch;
-      _secondaryid = id;
-    }
-
+    _primaryTouch = pos;
   }
 
   void touchMove(int id, Vector pos) {
-    if (id == _primaryid || (id==0 && !practiceMousePressed))
-      _primaryMove = pos;
-    else if (id == _secondaryid)
-      _secondaryMove = pos;
+    _primaryMove = pos;
   }
 
   void touchUp(int id, Vector pos, {required bool isMouse}) {
@@ -182,15 +147,7 @@ class PracticeDancer extends Dancer {
   }
 
   void _touchUpAction(int id) {
-    if (id == _primaryid) {
-      _primaryTouch = NOPOINT;
-      _primaryMove = NOPOINT;
-      _primaryid = -1;
-    } else if (id == _secondaryid) {
-      _secondaryTouch = NOPOINT;
-      _secondaryMove = NOPOINT;
-      _secondaryid = -1;
-    }
+    _primaryTouch = NOPOINT;
   }
 
 

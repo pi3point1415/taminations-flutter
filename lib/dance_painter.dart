@@ -77,7 +77,7 @@ class DancePainter extends fm.CustomPainter  {
   Vector mouse2dance(Vector wc) {
     var range = min(_size.x,_size.y);
     var s = range / 13.0;
-    var dx = -(wc.y - _size.y / 2.0) / s;
+    var dx = -(wc.y - 56 - _size.y / 2.0) / s; // The 56 is a magic number coming from page.dart
     var dy = -(wc.x - _size.x / 2.0) / s;
     return Vector(dx,dy);
   }

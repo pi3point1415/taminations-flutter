@@ -144,6 +144,30 @@ class _PracticeFrameState extends fm.State<PracticeFrame>
           else if (event is KeyUpEvent)
             danceModel.practiceDancer!.ctlDown = false;
         }
+        if (event.physicalKey == PhysicalKeyboardKey.keyW) {
+          if (event is KeyDownEvent)
+            danceModel.practiceDancer!.wDown = true;
+          else if (event is KeyUpEvent)
+            danceModel.practiceDancer!.wDown = false;
+        }
+        if (event.physicalKey == PhysicalKeyboardKey.keyA) {
+          if (event is KeyDownEvent)
+            danceModel.practiceDancer!.aDown = true;
+          else if (event is KeyUpEvent)
+            danceModel.practiceDancer!.aDown = false;
+        }
+        if (event.physicalKey == PhysicalKeyboardKey.keyS) {
+          if (event is KeyDownEvent)
+            danceModel.practiceDancer!.sDown = true;
+          else if (event is KeyUpEvent)
+            danceModel.practiceDancer!.sDown = false;
+        }
+        if (event.physicalKey == PhysicalKeyboardKey.keyD) {
+          if (event is KeyDownEvent)
+            danceModel.practiceDancer!.dDown = true;
+          else if (event is KeyUpEvent)
+            danceModel.practiceDancer!.dDown = false;
+        }
 
       },
       focusNode: _focusNode,
@@ -160,6 +184,8 @@ class _PracticeFrameState extends fm.State<PracticeFrame>
                     Settings.primaryControl == 'Left Finger';
                 danceModel.practiceDancer!.practiceMousePressed =
                     Settings.mouseControl.contains('Press');
+                danceModel.practiceDancer!.cardinalControl =
+                    Settings.cardinalControl.contains('cardinal');
                 return fm.Listener(
                     onPointerDown: (event) {
                       danceModel.practiceDancer!.touchDown(

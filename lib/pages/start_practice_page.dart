@@ -206,6 +206,15 @@ class _StartPracticeFrameState extends fm.State<StartPracticeFrame> {
                                       Settings.mouseControl = value ?? 'Press mouse button to move';
                                     });
                                   }),
+                            _StartPracticeRadioGroup(
+                              groupValue: Settings.cardinalControl,
+                              values: ['Use cardinal direction', 'Use facing direction'],
+                              onChanged: (value) {
+                                setState(() {
+                                  Settings.cardinalControl = value ?? 'Use cardinal direction';
+                                });
+                              }
+                            ),
                           ],
                         ),
                       ),
