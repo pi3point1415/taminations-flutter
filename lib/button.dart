@@ -34,7 +34,7 @@ class Button extends fm.StatelessWidget {
       fontWeight: fm.FontWeight.bold,
       fontSize: 20,
     )),
-        super(key: fm.Key(name));
+      super(key: fm.Key(name));
 
   @override
   fm.Widget build(fm.BuildContext context) =>

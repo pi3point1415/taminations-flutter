@@ -398,7 +398,7 @@ class DanceModel extends fm.ChangeNotifier {
             d.starttx = iangleTx * d.starttx;
         }  // practice dancer
 
-      leadin = 2.0;
+      leadin = 4.0;
       leadout = 2.0;
       _beats = 0.0;
       for (var d in dancers) {

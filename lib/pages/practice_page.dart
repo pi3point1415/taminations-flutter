@@ -26,10 +26,10 @@ import 'package:provider/provider.dart' as pp;
 
 import '../animated_call.dart';
 import '../beat_notifier.dart';
-import '../call_index.dart';
 import '../common_flutter.dart';
 import '../dance_model.dart';
 import 'page.dart';
+import '../call_entry.dart';
 
 
 class PracticePage extends fm.StatelessWidget {
@@ -50,8 +50,7 @@ class PracticeModel {
   Future<bool> firstAnimation(fm.BuildContext context, DanceModel danceModel) async =>
     nextAnimation(context, danceModel);
 
-  List<List<AnimatedCall>> _callsForLevel(LevelData level) {
-    var calls = callIndex.where((item) => item.level == level.dir);
+  List<List<AnimatedCall>> _callsForLevel(List<CallEntry> calls) {
     return calls.map((e) => e.calls).toList();
   }
 
@@ -60,7 +59,7 @@ class PracticeModel {
     final appState = pp.Provider.of<TamState>(context,listen: false);
     final titleModel = pp.Provider.of<TitleModel>(context,listen: false);
     final levelDatum = LevelData.find(appState.level!)!;
-    final levelCalls = _callsForLevel(levelDatum);
+    final levelCalls = _callsForLevel(appState.callList ?? []);
     //  Load that call and choose a random animation
     final randomCall = levelCalls[Random().nextInt(levelCalls.length)]
         .where((tam) => !tam.noDisplay).toList();

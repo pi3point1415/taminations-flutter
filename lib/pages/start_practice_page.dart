@@ -23,7 +23,48 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart' as pp;
 
 import '../common_flutter.dart';
+import '../call_index.dart';
+import '../call_entry.dart';
 import 'page.dart';
+
+final _levelColor = {
+  LevelData.B1 : Color.B1,
+  LevelData.B2 : Color.B2,
+  LevelData.MS : Color.MS,
+  LevelData.BMS : Color.BMS,
+  LevelData.SSD : Color.MS,
+  LevelData.MS26 : Color.MS,
+  LevelData.PLUS : Color.PLUS,
+  LevelData.P26 : Color.PLUS,
+  LevelData.A1 : Color.A1,
+  LevelData.A2 : Color.A2,
+  LevelData.ADV : Color.ADV,
+  LevelData.C1 : Color.C1,
+  LevelData.C2 : Color.C2,
+  LevelData.C3A : Color.C3A,
+  LevelData.C3B : Color.C3B,
+  LevelData.CHALLENGE : Color.CHALLENGE,
+  LevelData.INDEX : Color.LIGHTGRAY,
+  LevelData.NONE : Color.WHITE
+};
+extension LevelColor on LevelData {
+  Color get color => _levelColor[this]!;
+}
+
+final groupOrder = ['ssd', 'b1', 'b2', 'ms', 'm26', 'plus', 'p26', 'a1', 'a2', 'c1', 'c2', 'c3a', 'c3b'];
+
+final entries = callIndex.fold<Map<String, List<CallEntry>>>({}, (map, item) {
+  (map[item.level] ??= []).add(item);
+  return map;
+}).entries.toList()..sort((a, b) => groupOrder.indexOf(a.key).compareTo(groupOrder.indexOf(b.key)));
+
+final callData = entries.map((e) => e.value).toList();
+
+List<CallEntry> selectedCalls = [];
+
+final callSelector = GroupedExpandableList(data: callData, onSelectionChanged: (List<CallEntry> calls) {
+  selectedCalls = calls;
+},);
 
 class StartPracticePage extends fm.StatefulWidget {
 
@@ -41,60 +82,20 @@ class _StartPracticePageState extends fm.State<StartPracticePage> {
   }
 }
 
+List<CallEntry> getSelectedCalls() {
+  return selectedCalls;
+}
+
 //  Wrapper widget to handle taps
 class _TapDetector extends fm.StatelessWidget {
-  final String text;
-  final Color color;
-  final fm.StatelessWidget child;
-  _TapDetector({
-    required this.text,
-    required this.color,
-    required this.child});
-
   @override
   fm.Widget build(fm.BuildContext context) =>
       pp.Consumer<TamState>(
           builder: (context,appState,_) {
-            return fm.Material(
-              color: color,
-              child: fm.InkWell(
-                highlightColor: color.darker(),
-                  onTap: () {
-                    if (text == 'Tutorial')
-                      appState.change(mainPage: MainPage.TUTORIAL);
-                    else
-                      appState.change(mainPage: MainPage.PRACTICE, level: text);
-                  },
-                  child:child
-              ),
-            );
-          });
-}
-
-//  Wrapper widget to style level text
-class _StartPracticeItem extends fm.StatelessWidget {
-  final String text;
-  final Color color;
-  _StartPracticeItem({required this.text, required this.color});
-
-  @override
-  fm.Widget build(fm.BuildContext context) =>
-      fm.Expanded(
-        child: _TapDetector(
-          text: text,
-          color: color,
-          child: fm.Container(
-            decoration: fm.BoxDecoration(
-                border: fm.Border(
-                    top: fm.BorderSide(width: 1, color: fm.Colors.black),
-                    left: fm.BorderSide(width: 1, color: fm.Colors.black)
-                )),
-            child: fm.Align(
-                alignment: fm.Alignment.center,
-                child: fm.Text(text, style: fm.TextStyle(fontWeight: fm.FontWeight.bold, fontSize: 20))),
-          ),
-        ),
-      );
+            return Button('Start', onPressed: () {
+              appState.change(mainPage: MainPage.PRACTICE, callList: getSelectedCalls());
+            });
+      });
 }
 
 class _StartPracticeRadioGroup extends fm.StatelessWidget {
@@ -136,6 +137,7 @@ class _StartPracticeFrameState extends fm.State<StartPracticeFrame> {
 
   @override
   fm.Widget build(fm.BuildContext context) {
+
     return pp.Consumer<Settings>(
         builder: (context, settings, child) {
           return fm.OrientationBuilder(
@@ -215,65 +217,14 @@ class _StartPracticeFrameState extends fm.State<StartPracticeFrame> {
                                 });
                               }
                             ),
+                            _TapDetector(),
                           ],
                         ),
                       ),
                     ),
                     fm.Expanded(
-                      child: fm.Column(
-                        crossAxisAlignment: fm.CrossAxisAlignment.stretch,
-                        children: [
-                          _StartPracticeItem(
-                              text: 'Tutorial', color: Color.LIGHTGREY),
-                          fm.Expanded(
-                            child: fm.Row(
-                              crossAxisAlignment: fm.CrossAxisAlignment.stretch,
-                              children: [
-                                _StartPracticeItem(text: 'Basic 1', color: Color.B1),
-                                _StartPracticeItem(text: 'Basic 2', color: Color.B2)
-                              ],
-                            ),
-                          ),
-                          fm.Expanded(
-                            child: fm.Row(
-                              crossAxisAlignment: fm.CrossAxisAlignment.stretch,
-                              children: [
-                                _StartPracticeItem(
-                                    text: 'Mainstream', color: Color.MS),
-                                _StartPracticeItem(text: 'Plus', color: Color.PLUS)
-                              ],
-                            ),
-                          ),
-                          fm.Expanded(
-                            child: fm.Row(
-                              crossAxisAlignment: fm.CrossAxisAlignment.stretch,
-                              children: [
-                                _StartPracticeItem(text: 'A-1', color: Color.A1),
-                                _StartPracticeItem(text: 'A-2', color: Color.A2)
-                              ],
-                            ),
-                          ),
-                          fm.Expanded(
-                            child: fm.Row(
-                              crossAxisAlignment: fm.CrossAxisAlignment.stretch,
-                              children: [
-                                _StartPracticeItem(text: 'C-1', color: Color.C1),
-                                _StartPracticeItem(text: 'C-2', color: Color.C2)
-                              ],
-                            ),
-                          ),
-                          fm.Expanded(
-                            child: fm.Row(
-                              crossAxisAlignment: fm.CrossAxisAlignment.stretch,
-                              children: [
-                                _StartPracticeItem(text: 'C-3A', color: Color.C3A),
-                                _StartPracticeItem(text: 'C-3B', color: Color.C3B)
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                      child: callSelector
+                    ),
                   ],
                 ),
               );
@@ -281,5 +232,154 @@ class _StartPracticeFrameState extends fm.State<StartPracticeFrame> {
           );
         });
 
+  }
+}
+
+class GroupedExpandableList extends fm.StatefulWidget {
+  final List<List<CallEntry>> data;
+
+  final void Function(List<CallEntry> selected)? onSelectionChanged;
+
+  const GroupedExpandableList({super.key, required this.data, this.onSelectionChanged});
+
+  @override
+  fm.State<GroupedExpandableList> createState() => _GroupedExpandableListState();
+}
+
+class _GroupedExpandableListState extends fm.State<GroupedExpandableList> {
+  late List<bool> _expanded;
+  late List<List<bool>> _checked;
+
+  @override
+  void initState() {
+    super.initState();
+    _expanded = List.generate(widget.data.length, (_) => false);
+    _checked = widget.data
+        .map((group) => List.generate(group.length, (_) => false))
+        .toList();
+  }
+
+  List<CallEntry> getSelectedItems() {
+    final selected = <CallEntry>[];
+    for (var g = 0; g < widget.data.length; g++) {
+      for (var i = 0; i < widget.data[g].length; i++) {
+        if (_checked[g][i]) selected.add(widget.data[g][i]);
+      }
+    }
+    return selected;
+  }
+
+  bool _isGroupChecked(int groupIndex) =>
+      _checked[groupIndex].every((c) => c);
+
+  bool _isGroupIndeterminate(int groupIndex) {
+    final group = _checked[groupIndex];
+    final anyChecked = group.any((c) => c);
+    final allChecked = group.every((c) => c);
+    return anyChecked && !allChecked;
+  }
+
+  void _toggleGroup(int groupIndex, bool? value) {
+    setState(() {
+      _checked[groupIndex] = List.generate(
+        widget.data[groupIndex].length,
+            (_) => value ?? false,
+      );
+      widget.onSelectionChanged?.call(getSelectedItems());
+    });
+  }
+
+  void _toggleItem(int groupIndex, int itemIndex, bool? value) {
+    setState(() {
+      _checked[groupIndex][itemIndex] = value ?? false;
+      widget.onSelectionChanged?.call(getSelectedItems());
+    });
+  }
+
+  @override
+  fm.Widget build(fm.BuildContext context) {
+
+    return fm.ListView.builder(
+      itemCount: widget.data.length,
+      itemBuilder: (context, groupIndex) {
+        final group = widget.data[groupIndex];
+        final isExpanded = _expanded[groupIndex];
+        final isGroupChecked = _isGroupChecked(groupIndex);
+        final isIndeterminate = _isGroupIndeterminate(groupIndex);
+
+        return fm.Card(
+          margin: const fm.EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: fm.Column(
+            children: [
+              // Group header
+              fm.Material(
+                color: LevelData.find(group[0].level)!.color,
+              child: fm.InkWell(
+                  highlightColor: LevelData.find(group[0].level)!.color.darker(),
+                  onTap: () => setState(
+                          () => _expanded[groupIndex] = !_expanded[groupIndex]),
+                  child: fm.Padding(
+                    padding: const fm.EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 4.0),
+                    child: fm.Row(
+                      children: [
+                        // Group checkbox (indeterminate handled via icon)
+                        fm.Checkbox(
+                          value: isIndeterminate ? null : isGroupChecked,
+                          tristate: true,
+                          onChanged: (val) {
+                            // Tristate cycles: null → true; treat null as toggling to all-on if mixed
+                            final newVal = (val == null || val == true)
+                                ? !isGroupChecked
+                                : val;
+                            _toggleGroup(groupIndex, newVal);
+                          },
+                        ),
+                        fm.Text(
+                          LevelData.find(group[0].level).toString(),
+                          style: const fm.TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const fm.Spacer(),
+                        fm.Text(
+                          '${group.length} items',
+                          style: fm.TextStyle(color: fm.Colors.grey[600], fontSize: 13),
+                        ),
+                        const fm.SizedBox(width: 8),
+                        fm.Icon(isExpanded
+                            ? fm.Icons.expand_less
+                            : fm.Icons.expand_more),
+                      ],
+                    ),
+                  ),
+                )
+              ),
+              // Items
+              if (isExpanded)
+                ...List.generate(group.length, (itemIndex) {
+                  return fm.Column(
+                    children: [
+                      const fm.Divider(height: 1),
+                      fm.CheckboxListTile(
+                        tileColor: LevelData.find(group[itemIndex].level)!.color,
+                        dense: true,
+                        contentPadding:
+                        const fm.EdgeInsets.only(left: 32, right: 16),
+                        title: fm.Text(group[itemIndex].title),
+                        value: _checked[groupIndex][itemIndex],
+                        onChanged: (val) =>
+                            _toggleItem(groupIndex, itemIndex, val),
+                        controlAffinity: fm.ListTileControlAffinity.leading,
+                      ),
+                    ],
+                  );
+                }),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

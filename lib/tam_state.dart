@@ -22,6 +22,7 @@ import 'package:flutter/material.dart' as fm;
 import 'package:taminations/common_flutter.dart';
 
 import 'extensions.dart';
+import 'call_entry.dart';
 
 class VirtualKeyboardVisible {
   bool isVisible = false;
@@ -79,6 +80,7 @@ class TamState extends fm.ChangeNotifier {
   String? formation;
   String? calls;
   String? helplink;
+  List<CallEntry>? callList;
   @override
   bool operator ==(Object other) =>
       (other is TamState)
@@ -99,14 +101,15 @@ class TamState extends fm.ChangeNotifier {
     this.definition = false,
     this.axes = 'None',
     this.formation,
-    this.calls
+    this.calls,
+    this.callList,
   }) : _level=level, _link=link, _animnum=animnum, _animname=animname,
         _mainPage=mainPage, _detailPage=detailPage;
 
   void change({String? level, String? link, int? animnum, String? animname,
     MainPage? mainPage, DetailPage? detailPage,
     bool? embed, bool? play, bool? loop, bool? grid, bool? definition, String? axes,
-    String? formation, String? calls, String? helplink}) {
+    String? formation, String? calls, String? helplink, List<CallEntry>? callList}) {
     final before = toString();
     final params = Uri.parse(link ?? '').queryParameters;
     _level = level ?? _level;
@@ -134,6 +137,7 @@ class TamState extends fm.ChangeNotifier {
     this.helplink = helplink ?? this.helplink;
     if (toString() != before)
       notifyListeners();
+    this.callList = callList ?? this.callList;
   }
 
   //  For URL generation

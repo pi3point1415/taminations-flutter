@@ -84,12 +84,11 @@ class PracticeDancer extends Dancer {
 
 
   Matrix computeMatrix(double beat) {
-    return tx;
-    // final savetx = tx.clone();
-    // super.animate(beat);
-    // final computetx = tx.clone();
-    // tx = savetx;
-    // return computetx;
+    final savetx = tx.clone();
+    super.animate(beat);
+    final computetx = tx.clone();
+    tx = savetx;
+    return computetx;
   }
 
   @override
