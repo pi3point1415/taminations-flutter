@@ -45,13 +45,14 @@ final _levelColor = {
   LevelData.C3B : Color.C3B,
   LevelData.CHALLENGE : Color.CHALLENGE,
   LevelData.INDEX : Color.LIGHTGRAY,
+  LevelData.BANANDY : Color.C1,
   LevelData.NONE : Color.WHITE
 };
 extension LevelColor on LevelData {
   Color get color => _levelColor[this]!;
 }
 
-final groupOrder = ['ssd', 'b1', 'b2', 'ms', 'm26', 'plus', 'p26', 'a1', 'a2', 'c1', 'c2', 'c3a', 'c3b'];
+final groupOrder = ['ssd', 'b1', 'b2', 'ms', 'm26', 'plus', 'p26', 'a1', 'a2', 'banandy', 'c1', 'c2', 'c3a', 'c3b'];
 
 final entries = callIndex.fold<Map<String, List<CallEntry>>>({}, (map, item) {
   (map[item.level] ??= []).add(item);

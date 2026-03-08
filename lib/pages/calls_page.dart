@@ -44,6 +44,7 @@ final _levelColor = {
   LevelData.C3A : Color.C3A,
   LevelData.C3B : Color.C3B,
   LevelData.CHALLENGE : Color.CHALLENGE,
+  LevelData.BANANDY : Color.C1,
   LevelData.INDEX : Color.LIGHTGRAY,
   LevelData.NONE : Color.WHITE
 };

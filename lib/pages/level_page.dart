@@ -237,6 +237,10 @@ class LevelFrame extends fm.StatelessWidget {
                 text:'Challenge' ,
                 background:Color.CHALLENGE),
             _IndentedLineWidget(
+                text:'C-1 Class 2026' ,
+                background:Color.C1,
+                indented:Color.CHALLENGE),
+            _IndentedLineWidget(
                 text:'C-1' ,
                 background:Color.C1,
                 indented:Color.CHALLENGE),

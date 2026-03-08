@@ -44,6 +44,7 @@ class LevelData implements Comparable<LevelData> {
   static final C2 = LevelData('C-2', 'c2', 'c2');
   static final C3A = LevelData('C-3A', 'c3a', 'c3a');
   static final C3B = LevelData('C-3B', 'c3b', 'c3b');
+  static final BANANDY = LevelData('C-1 Class 2026', 'banandy', 'banandy');
   static final INDEX = LevelData('Index of All Calls', 'all', '[^s]');
   static final NONE = LevelData('','x','x');  // for sequencer commands
 
@@ -65,6 +66,7 @@ class LevelData implements Comparable<LevelData> {
     LevelData.C2,
     LevelData.C3A,
     LevelData.C3B,
+    LevelData.BANANDY,
     LevelData.INDEX,
   ];
 
