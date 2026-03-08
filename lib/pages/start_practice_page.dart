@@ -52,7 +52,7 @@ extension LevelColor on LevelData {
   Color get color => _levelColor[this]!;
 }
 
-final groupOrder = ['ssd', 'b1', 'b2', 'ms', 'm26', 'plus', 'p26', 'a1', 'a2', 'banandy', 'c1', 'c2', 'c3a', 'c3b'];
+final groupOrder = ['ssd', 'b1', 'b2', 'ms', 'm26', 'plus', 'p26', 'a1', 'a2', 'e', 'c1', 'c2', 'c3a', 'c3b'];
 
 final entries = callIndex.fold<Map<String, List<CallEntry>>>({}, (map, item) {
   (map[item.level] ??= []).add(item);

@@ -40,11 +40,11 @@ class LevelData implements Comparable<LevelData> {
   static final A1 = LevelData('A-1', 'a1', 'a1');
   static final A2 = LevelData('A-2', 'a2', 'a2');
   static final CHALLENGE = LevelData('Challenge', 'cha', 'c');
+  static final BANANDY = LevelData('C-1 Class 2026', 'e', 'e');
   static final C1 = LevelData('C-1', 'c1', 'c1');
   static final C2 = LevelData('C-2', 'c2', 'c2');
   static final C3A = LevelData('C-3A', 'c3a', 'c3a');
   static final C3B = LevelData('C-3B', 'c3b', 'c3b');
-  static final BANANDY = LevelData('C-1 Class 2026', 'banandy', 'banandy');
   static final INDEX = LevelData('Index of All Calls', 'all', '[^s]');
   static final NONE = LevelData('','x','x');  // for sequencer commands
 
@@ -62,11 +62,11 @@ class LevelData implements Comparable<LevelData> {
     LevelData.A1,
     LevelData.A2,
     LevelData.CHALLENGE,
+    LevelData.BANANDY,
     LevelData.C1,
     LevelData.C2,
     LevelData.C3A,
     LevelData.C3B,
-    LevelData.BANANDY,
     LevelData.INDEX,
   ];
 
