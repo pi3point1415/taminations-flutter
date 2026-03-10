@@ -68,7 +68,9 @@ class PracticeModel {
     titleModel.title = randomAnim.title;
     titleModel.level = levelDatum.name;
     danceModel.setAnimatedCall(randomAnim,
-        practiceGender: Settings.practiceGender=='Boy' ? Gender.BOY : Gender.GIRL);
+        practiceGender: Settings.practiceGender=='Boy' ? Gender.BOY : Gender.GIRL,
+        overrideLeadin: true,
+    );
     danceModel.doPlay();
     return true;
   }

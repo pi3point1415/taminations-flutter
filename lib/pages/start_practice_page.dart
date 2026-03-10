@@ -211,10 +211,10 @@ class _StartPracticeFrameState extends fm.State<StartPracticeFrame> {
                                   }),
                             _StartPracticeRadioGroup(
                               groupValue: Settings.cardinalControl,
-                              values: ['Use cardinal direction', 'Use facing direction'],
+                              values: ['Use cardinal directions', 'Use facing direction'],
                               onChanged: (value) {
                                 setState(() {
-                                  Settings.cardinalControl = value ?? 'Use cardinal direction';
+                                  Settings.cardinalControl = value ?? 'Use cardinal directions';
                                 });
                               }
                             ),

@@ -22,8 +22,8 @@ import 'common_flutter.dart';
 
 class PracticeDancer extends Dancer {
 
-  static const ANGLESENSITIVITY = 0.5;
-  static const MOVESENSITIVITY = 1.0;
+  static const ANGLESENSITIVITY = 1.5;
+  static const MOVESENSITIVITY = 1.5;
   static const DIRECTIONALPHA = 0.9;
   static const DIRECTIONTHRESHOLD = 0.002;
   static const NOPOINT = Vector();
@@ -56,6 +56,7 @@ class PracticeDancer extends Dancer {
   var _secondaryTouch = NOPOINT;
   var _secondaryMove = NOPOINT;
   var primaryIsLeft = true;
+  double p_beat = 0;
 
   //  Need a val for original fill color, as we change it
   final Color _onTrackColor;
@@ -96,6 +97,10 @@ class PracticeDancer extends Dancer {
 
   @override
   void animate(double beat) {
+    var delta = beat - p_beat;
+
+    var mult = shiftDown ? 0.5 : 1;
+
     fillColor = (beat <= 0 || onTrack)
         ? _onTrackColor.veryBright()
         : Color.GRAY;
@@ -106,8 +111,8 @@ class PracticeDancer extends Dancer {
     } else {
 
       var trans = Matrix.getTranslation(
-          ((wDown ? 0.02 : 0) - (sDown ? 0.02 : 0)) * MOVESENSITIVITY,
-          ((aDown ? 0.02 : 0) - (dDown ? 0.02 : 0)) * MOVESENSITIVITY
+          ((wDown ? 1 : 0) - (sDown ? 1 : 0)) * delta * mult * MOVESENSITIVITY,
+          ((aDown ? 1 : 0) - (dDown ? 1 : 0)) * delta * mult * MOVESENSITIVITY
       );
 
       // Movement relative to facing direction
@@ -124,9 +129,10 @@ class PracticeDancer extends Dancer {
         tx = tx * Matrix.getRotation(-tx.angle) * Matrix.getRotation(a2.angle);
       }
       else {
-        tx = tx * Matrix.getRotation(((lDown ? 0.05 : 0) - (rDown ? 0.05 : 0)) * ANGLESENSITIVITY);
+        tx = tx * Matrix.getRotation(((lDown ? 1 : 0) - (rDown ? 1 : 0)) * delta * mult * ANGLESENSITIVITY );
       }
     }
+    p_beat = beat;
   }
 
   void touchDown(int id, Vector pos, {required bool isMouse}) {

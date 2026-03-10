@@ -312,12 +312,12 @@ class DanceModel extends fm.ChangeNotifier {
   }
 
   void setAnimatedCall(AnimatedCall call, {int geometryType=Geometry.SQUARE,
-    int practiceGender = -1, bool practiceIsRandom = true}) {
+    int practiceGender = -1, bool practiceIsRandom = true, bool overrideLeadin = false}) {
     _call = call;
     _geometryType = call.formation.asymmetric ? Geometry.ASYMMETRIC : geometryType;
     _interactiveDancer = practiceGender;
     _interactiveRandom = practiceIsRandom;
-    _resetAnimatedCall();
+    _resetAnimatedCall(overrideLeadin: overrideLeadin);
     partstr = call.parts + call.fractions;
     hasParts = call.parts.isNotBlank;
     later(() {
@@ -325,7 +325,7 @@ class DanceModel extends fm.ChangeNotifier {
     });
   }
 
-  void _resetAnimatedCall() {
+  void _resetAnimatedCall({bool overrideLeadin = false}) {
     var mycall = _call;
     if (mycall != null) {
       var geometry = Geometry(_geometryType);
@@ -398,7 +398,7 @@ class DanceModel extends fm.ChangeNotifier {
             d.starttx = iangleTx * d.starttx;
         }  // practice dancer
 
-      leadin = 4.0;
+      leadin = overrideLeadin ? 4.0 : 2.0;
       leadout = 2.0;
       _beats = 0.0;
       for (var d in dancers) {
